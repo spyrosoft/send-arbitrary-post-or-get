@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Post Arbitrary Form Data to Any URL Tool - HTML</title>
+		<style type="text/css">
+			* { margin: 0; padding: 0; }
+			body {
+				padding: 40px;
+				text-align: center;
+				font-size: 14px;
+				font-family: sans-serif;
+				color: #FFFFFF;
+				background-color: #000000;
+			}
+			h1 {
+				margin-bottom: 20px;
+			}
+			.options div {
+				margin-bottom: 20px;
+			}
+		</style>
+		<script type="text/javascript">
+			
+		</script>
+	</head>
+	<body>
+		<h1>Post Arbitrary Form Data to Any URL</h1>
+		<noscript><h2>You're going to need JavaScript on for this.</h2></noscript>
+		<div id="options" class="options">
+			<div>
+				<input type="radio" name="post-or-get" value="post" id="post-for-post-or-get" />
+				<label for="post-for-post-or-get">Post</label>
+				-
+				<input type="radio" name="post-or-get" value="get" id="get-for-post-or-get" />
+				<label for="get-for-post-or-get">Get</label>
+			</div>
+			<div>
+				<div>
+					<label for="where-to-send-the-data">Where to send the data:</label>
+				</div>
+				<input type="text" id="where-to-send-the-data" size="100" />
+			</div>
+			<fieldset>
+				<div id="new-field">
+					<label for="new-variable">Variable</label>
+					<input type="text" id="new-variable" />
+					<label for="new-value">Value</label>
+					<input type="text" id="new-value" />
+				</div>
+				<div>
+					<input type="button" value="Add" />
+				</div>
+			</fieldset>
+		</div>
+		<form id="arbitrary-data-form" method="post"></form>
+	</body>
+</html>
