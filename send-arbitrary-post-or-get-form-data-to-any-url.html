@@ -18,6 +18,9 @@
 			h1 {
 				margin-bottom: 20px;
 			}
+			hr {
+				margin-bottom: 20px;
+			}
 			input,
 			textarea {
 				padding: 2px 4px;
@@ -79,6 +82,14 @@
 			<div>
 				<input type="button" value="Submit" id="submit-button" />
 			</div>
+			<hr />
+			<div>
+				<input type="button" value="Save Data" id="save-data-button" />
+				<input type="button" value="Load Data" id="load-data-button" />
+			</div>
+			<div>
+				<textarea id="save-or-load-data-textarea"></textarea>
+			</div>
 		</div>
 		<script type="text/javascript">
 			var variables = [];
@@ -86,12 +97,16 @@
 			
 			if ( test_browser_compatibility() ) {
 				document.getElementById( 'add-new-variable' ).addEventListener( 'click', add_new_variable );
-				document.getElementById( 'new-variable' ).addEventListener( 'keydown', add_new_variable_on_enter );
+				document.getElementById( 'new-variable' ).addEventListener( 'keydown', focus_new_value );
 				document.getElementById( 'new-value' ).addEventListener( 'keydown', add_new_variable_on_enter );
 				document.getElementById( 'submit-button' ).addEventListener( 'click', submit_form );
+				document.getElementById( 'save-data-button' ).addEventListener( 'click', generate_save_data );
+				document.getElementById( 'load-data-button' ).addEventListener( 'click', load_save_data );
 			} else {
 				alert( 'I\'m afraid your browser isn\'t supported, sorry!' );
 			}
+
+			document.getElementById( 'where-to-send-the-data' ).select();
 			
 			function add_new_variable()
 			{
@@ -114,6 +129,8 @@
 				document.getElementById( 'new-variable' ).value = '';
 				document.getElementById( 'new-value' ).value = '';
 				refresh_variables_display();
+
+				document.getElementById( 'new-variable' ).select();
 			}
 
 			function refresh_variables_display()
@@ -133,18 +150,18 @@
 					new_row.appendChild( new_variable_value_cell );
 					
 					var new_delete_row_cell = document.createElement( 'td' );
-
+					
 					var delete_this_row_node = document.createElement( 'input' );
 					delete_this_row_node.type = 'button';
 					delete_this_row_node.value = 'X';
 					delete_this_row_node.onclick = delete_this_row;
 					new_delete_row_cell.appendChild( delete_this_row_node );
-
+					
 					var delete_this_variable_node = document.createElement( 'input' );
 					delete_this_variable_node.type = 'hidden';
 					delete_this_variable_node.name = variables[ variable_index ];
 					delete_this_variable_node.value = variable_values[ variable_index ];
-
+					
 					new_delete_row_cell.appendChild( delete_this_variable_node );
 					new_row.appendChild( new_delete_row_cell );
 					
@@ -178,6 +195,53 @@
 					document.getElementById( 'arbitrary-data-form' ).method = 'get';
 				}
 				document.getElementById( 'arbitrary-data-form' ).submit();
+			}
+			
+			function generate_save_data()
+			{
+				var where_to_send_the_data = document.getElementById( 'where-to-send-the-data' ).value;
+				var save_data = {
+					'where-to-send-the-data' : where_to_send_the_data,
+					'variables' : variables,
+					'variable_values' : variable_values
+				};
+				document.getElementById( 'save-or-load-data-textarea' ).value = JSON.stringify( save_data );
+			}
+			
+			function load_save_data()
+			{
+				var data_textarea_value = document.getElementById( 'save-or-load-data-textarea' ).value;
+				try {
+					var load_data = JSON.parse( data_textarea_value );
+				} catch ( error ) {
+					alert( 'Please enter valid data to be loaded.' );
+					return;
+				}
+					if ( ! load_data[ 'where-to-send-the-data' ] ) {
+						alert( 'The URL is missing from the load data.' );
+						return;
+					}
+					if ( ! load_data[ 'variables' ] ) {
+						alert( 'The variables are missing from the load data.' );
+						return;
+					}
+					if ( ! load_data[ 'variable_values' ] ) {
+						alert( 'The variable values are missing from the load data.' );
+						return;
+					}
+					
+					document.getElementById( 'where-to-send-the-data' ).value = load_data[ 'where-to-send-the-data' ];
+					variables = load_data[ 'variables' ];
+					variable_values = load_data[ 'variable_values' ];
+					refresh_variables_display();
+			}
+			
+			function focus_new_value( event )
+			{
+				if ( test_for_enter( event ) ) {
+					event.preventDefault();
+					document.getElementById( 'new-value' ).select();
+				}
 			}
 			
 			function add_new_variable_on_enter( event )
