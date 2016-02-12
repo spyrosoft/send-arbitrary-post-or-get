@@ -84,11 +84,13 @@
 			</div>
 			<hr />
 			<div>
-				<input type="button" value="Save Data" id="save-data-button" />
-				<input type="button" value="Load Data" id="load-data-button" />
+				<label>
+					Save this somewhere to load it again later:
+					<textarea id="save-or-load-data-textarea"></textarea>
+				</label>
 			</div>
 			<div>
-				<textarea id="save-or-load-data-textarea"></textarea>
+				<input type="button" value="Load Data" id="load-data-button" />
 			</div>
 		</div>
 		<script type="text/javascript">
@@ -100,12 +102,11 @@
 				document.getElementById( 'new-variable' ).addEventListener( 'keydown', focus_new_value );
 				document.getElementById( 'new-value' ).addEventListener( 'keydown', add_new_variable_on_enter );
 				document.getElementById( 'submit-button' ).addEventListener( 'click', submit_form );
-				document.getElementById( 'save-data-button' ).addEventListener( 'click', generate_save_data );
 				document.getElementById( 'load-data-button' ).addEventListener( 'click', load_save_data );
 			} else {
 				alert( 'I\'m afraid your browser isn\'t supported, sorry!' );
 			}
-
+			
 			document.getElementById( 'where-to-send-the-data' ).select();
 			
 			function add_new_variable()
@@ -129,10 +130,12 @@
 				document.getElementById( 'new-variable' ).value = '';
 				document.getElementById( 'new-value' ).value = '';
 				refresh_variables_display();
-
+				
+				generate_save_data();
+				
 				document.getElementById( 'new-variable' ).select();
 			}
-
+			
 			function refresh_variables_display()
 			{
 				document.getElementById( 'variables-display' ).innerHTML = '';
