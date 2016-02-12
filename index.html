@@ -102,6 +102,7 @@
 				document.getElementById( 'new-variable' ).addEventListener( 'keydown', focus_new_value );
 				document.getElementById( 'new-value' ).addEventListener( 'keydown', add_new_variable_on_enter );
 				document.getElementById( 'submit-button' ).addEventListener( 'click', submit_form );
+				document.getElementById( 'save-or-load-data-textarea' ).addEventListener( 'keydown', load_save_data_on_enter );
 				document.getElementById( 'load-data-button' ).addEventListener( 'click', load_save_data );
 			} else {
 				alert( 'I\'m afraid your browser isn\'t supported, sorry!' );
@@ -237,6 +238,15 @@
 					variables = load_data[ 'variables' ];
 					variable_values = load_data[ 'variable_values' ];
 					refresh_variables_display();
+			}
+			
+			function load_save_data_on_enter( key_event )
+			{
+				if ( test_for_enter( key_event ) ) {
+				console.log('yes')
+					key_event.preventDefault();
+					load_save_data();
+				}
 			}
 			
 			function focus_new_value( event )
